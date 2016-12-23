@@ -1,3 +1,6 @@
+## Question Classification Dataset
+## http://cogcomp.cs.illinois.edu/Data/QA/QC/
+
 def split_question(question):
     q = question.strip().split(" ")
     return (q[0],q[1:])
