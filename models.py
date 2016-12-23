@@ -7,6 +7,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Embedding
 from keras.layers import Convolution1D, MaxPooling1D
 from keras.layers import LSTM, GRU, SimpleRNN
+from keras.layers import Input, Bidirectional
 
 def build_lstm(max_features, embedding_dims, nb_classes):  
    model = Sequential()
@@ -66,6 +67,15 @@ def build_cnn_lstm(embedding_size, maxlen, nb_filter, filter_length, pool_length
     model.add(MaxPooling1D(pool_length=pool_length))
     model.add(LSTM(lstm_output_size))
     model.add(Dense(nb_classes))
-    model.add(Activation('softmsx'))
+    model.add(Activation('softmax'))
      
     return model     
+
+def build_bidirectional_lstm(embedding_dims, lstm_output_size, nb_classes):
+    model = Sequential()
+    model.add(Embedding(max_features, embedding_dims, input_length=maxlen))
+    model.add(Bidirectional(LSTM(lstm_output_size)))
+    model.add(Dropout(0.5))
+    model.add(Dense(nb_classes, activation='softmax'))
+    
+    return model
