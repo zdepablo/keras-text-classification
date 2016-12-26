@@ -43,14 +43,21 @@ def load_subjectivity_corpus(dirpath):
     
     return (X,Y)
 
-def load_sentiment_data(dirpath):
+def load_sentiment_data(dirpath, max_tokens = 0):
     (X,Y) = load_sentiment_corpus(dirpath)
     X_train_sentences, X_test_sentences, y_train_label, y_test_label = train_test_split(X,Y, test_size = 0.1, random_state = 43)
     
     worddict, wordcount = build_dict(X_train_sentences)
     
-    X_train = generate_sequence(X_train_sentences, worddict)
-    X_test  = generate_sequence(X_test_sentences, worddict)
+    if (max_tokens > 0 ):
+        filterdict = {k:v for k,v in worddict.iteritems() if v < max_tokens } 
+    else: 
+        filterdict = worddict
+        
+    print 'Filtering to', (len(filterdict) + 2) , ' unique words'
+    
+    X_train = generate_sequence(X_train_sentences, filterdict)
+    X_test  = generate_sequence(X_test_sentences, filterdict)
     
     labels = set(y_train_label + y_test_label)
     catdict = {label: idx for (idx, label) in enumerate(labels)}
@@ -58,4 +65,4 @@ def load_sentiment_data(dirpath):
     y_train = [catdict[y] for y in y_train_label]
     y_test  = [catdict[y] for y in y_test_label]
     
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, worddict

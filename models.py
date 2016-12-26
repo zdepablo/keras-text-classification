@@ -10,17 +10,16 @@ from keras.layers import LSTM, GRU, SimpleRNN
 from keras.layers import Input, Bidirectional
 
 def build_lstm(max_features, embedding_dims, nb_classes):  
-   model = Sequential()
+    model = Sequential()
+    model.add(Embedding(max_features, embedding_dims, dropout=0.2))
+    model.add(LSTM(embedding_dims, dropout_W=0.2, dropout_U=0.2)) 
+    model.add(Dense(nb_classes))
+    model.add(Activation('softmax'))
 
-   model.add(Embedding(max_features, 128, dropout=0.2))
-   model.add(LSTM(128, dropout_W=0.2, dropout_U=0.2)) 
-   model.add(Dense(nb_classes))
-   model.add(Activation('softmax'))
-
-   return model
+    return model
 
 
-def build_cnn(embedding_dims, maxlen, nb_filter, filter_length, hidden_dims, nb_classes ) : 
+def build_cnn(max_features, embedding_dims, maxlen, nb_filter, filter_length, hidden_dims, nb_classes ) : 
     model = Sequential()
     # we start off with an efficient embedding layer which maps
     # our vocab indices into embedding_dims dimensions
