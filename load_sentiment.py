@@ -1,5 +1,5 @@
 
-# scikit-learn 0.18
+# scikit-learn 0.17
 from sklearn.cross_validation import train_test_split
 from text_utils import build_dict, generate_sequence
 
